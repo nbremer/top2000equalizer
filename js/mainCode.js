@@ -78,7 +78,7 @@ d3.select("#searchBox")
 	.style("left", (width/2 + xOffset + padding + margin.left - searchWidth/2)+"px")
 	.style("width", searchWidth+"px");
 
-if (handheld = false) {
+if (handheld = true) {
 	//Initiate slider
 	var sliderWidth = 350;//Math.min(400,width/2);
 	d3.select('#slider')
@@ -95,7 +95,14 @@ if (handheld = false) {
 					chosenYear = value;
 					updateDots(chosenYear);
 				}));
-}//if	
+} else {
+	var handheldText = d3.select("#slider")
+		  .append('text')                                     
+		  .attr('x', width/2) 
+		  //.attr('y', -10)	  
+		  //.attr("class", "yearTitle")
+		  .text("If you want to see other years, please check this page on a pc/laptop"); 
+}//else
 		
 //Initiate outer chart SVG
 var svg = d3.select("#chart").append("svg")
