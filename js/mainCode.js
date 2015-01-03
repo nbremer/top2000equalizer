@@ -1,3 +1,5 @@
+//Check if people are viewing from a handheld device
+//If yes, only load the 2014 data to speed things up
 var handheld,
 	fileName;
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -79,7 +81,7 @@ d3.select("#searchBox")
 	.style("left", (width/2 + xOffset + padding + margin.left - searchWidth/2)+"px")
 	.style("width", searchWidth+"px");
 
-
+//If the user us using a handheld, do not show the slider
 var sliderWidth = 350;//Math.min(400,width/2);
 if (handheld == false) {
 	//Initiate slider
