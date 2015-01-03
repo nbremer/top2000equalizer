@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+	
+	<!-- Google fonts -->
+	<link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Raleway:100,300' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
+
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+	
+	<link rel="stylesheet" href="css/style.css"/>
+	<link rel="stylesheet" href="css/tooltip.css"/>
+	<link rel="stylesheet" href="css/d3.slider.css"/> 
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+	
+<body>
+
+	<div id="intro">
+		<h2>The Dutch Top 2000</h2>
+		<span>At the end of each year since 1999 millions of Dutch vote for the top 2000 best songs ever made.</span><br>
+		<span>Here you can see the distribution of the top 2000 songs according to their year of release.</span><br>
+		<!--<span>Change the slider to see the top 2000 from other years, or hover over bars to see which song it is.</span>-->
+	</div>
+	
+	<!-- The search box -->
+	<div id="searchBox" class="ui-widget">
+	   <input id="txtSearch" type="text" placeholder="Search for an artist...">
+	   <button id="btnSearch" type="button" onclick="searchArtist()">Search</button>
+	</div>
+
+	<!-- slider -->
+	<div id="slider"></div>
+	
+	<!-- chart -->
+	<div id="chart"></div>
+
+	<div id="note">
+		<span>Created by Nadieh Bremer | <b><a href="http://www.visualcinnamon.com">Visual Cinnamon</a></b> | <a href="http://nbremer.github.io/top2000equalizer/">Go to full version</a></span><br>
+		<span>Due to chart readability, 11 songs released before 1950 are not shown | Data from: <a href="http://www.radio2.nl/top2000">http://www.radio2.nl/top2000</a></span>
+	</div>
+	
+	<!-- Create div structure for Tooltip -->
+	<div id="tooltip">
+		<div id="tooltip-Container">
+			<div class="tooltip-band"></div>
+			<div class="tooltip-rule"></div>
+			<div id="tooltip-year"></div>
+			<div id="tooltip-title"></div>
+			<div id="tooltip-place"></div>
+			<div class="tooltip-tail"></div>
+		</div>
+	</div>
+
+	<script src="js/showTooltip.js"></script>
+	<script src="js/createLegend.js"></script>
+	<script src="js/helperFunctions.js"></script>
+	<script src="js/d3.slider.js"></script>
+	<script src="js/mainCode.js"></script>
+
+</body>
+</html>
