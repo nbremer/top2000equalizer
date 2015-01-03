@@ -1,4 +1,5 @@
-var handheld;
+var handheld,
+	fileName;
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 	handheld = true
 	fileName = "top2000lijst2014.csv";
@@ -78,9 +79,10 @@ d3.select("#searchBox")
 	.style("left", (width/2 + xOffset + padding + margin.left - searchWidth/2)+"px")
 	.style("width", searchWidth+"px");
 
-if (handheld = true) {
+
+var sliderWidth = 350;//Math.min(400,width/2);
+if (handheld == false) {
 	//Initiate slider
-	var sliderWidth = 350;//Math.min(400,width/2);
 	d3.select('#slider')
 		.style("top", "20px")
 		.style("left", (width/2 + xOffset + padding + margin.left - sliderWidth/2)+"px")
@@ -97,10 +99,11 @@ if (handheld = true) {
 				}));
 } else {
 	var handheldText = d3.select("#slider")
+		  .style("left", (width/2 + xOffset + padding + margin.left - sliderWidth/2)+"px") 
+		  .style("width", sliderWidth+"px")
+		  .style("top", "10px")
 		  .append('text')                                     
-		  .attr('x', width/2) 
-		  //.attr('y', -10)	  
-		  //.attr("class", "yearTitle")
+		  .attr("text-align", "center")
 		  .text("If you want to see other years, please check this page on a pc/laptop"); 
 }//else
 		

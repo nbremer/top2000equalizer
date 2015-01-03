@@ -60,6 +60,10 @@ body {
 	text-align: left;	
 }
 
+#slider {
+	position: relative;
+}
+
 a {
 	text-decoration: none;
 	color: #6E6E6E;
