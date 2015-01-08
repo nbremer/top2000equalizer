@@ -4,6 +4,20 @@ window.onerror = function() {
     location.reload();
 }
 
+//Check for IE
+function detectIE() {
+
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+		var trident = ua.indexOf('Trident/');
+		
+		if (msie > 0 || trident > 0) { 
+			return true;
+		} else {
+			return false;
+		}//else
+}//detectIE
+
 //Calculate height of each rectangle
 function locateY(d) {
 

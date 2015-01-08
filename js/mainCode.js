@@ -1,13 +1,24 @@
+//Check for IE
+var IE = detectIE();
+
 //Check if people are viewing from a handheld device
 //If yes, only load the 2014 data to speed things up
 var handheld,
 	fileName;
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 	handheld = true
-	fileName = "top2000lijst2014.csv";
+	if (IE == true) {
+		fileName = "top2000lijst2014IE.csv";
+	} else {
+		fileName = "top2000lijst2014.csv";
+	}//else
 } else {
 	handheld = false;
-	fileName = "top2000lijst.csv";
+	if (IE == true) {
+		fileName = "top2000lijstIE.csv";
+	} else {
+		fileName = "top2000lijst.csv";
+	}//else
 }
 
 //Width and Height of the SVG
