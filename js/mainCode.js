@@ -7,7 +7,7 @@ var handheld,
 	fileName;
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 	handheld = true
-	if (IE == true) {
+	if (IE == true) { //IE cannot read Unicode saved files
 		fileName = "top2000lijst2014IE.csv";
 	} else {
 		fileName = "top2000lijst2014.csv";
