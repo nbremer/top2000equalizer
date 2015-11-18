@@ -37,7 +37,7 @@ var xOffset = Math.max(0, ((wind.innerWidth || e.clientWidth || g.clientWidth)-m
 var offsets = document.getElementById('chart').getBoundingClientRect();
 	
 //SVG locations
-var margin = {top: 100, right: 20, bottom: 50, left: 40},
+var margin = {top: 200, right: 20, bottom: 50, left: 40},
 	padding = 40,
     width = w - margin.left - margin.right - padding,
     height = h - margin.top - margin.bottom - padding - offsets.top;
@@ -78,6 +78,7 @@ var color = d3.scale.linear()
 
 //Change note location
 d3.select("#note")
+	.style("top", (height + margin.top + margin.bottom + 40)+"px")
 	.style("left", (xOffset + 20)+"px");
 	
 //Change intro location
@@ -85,12 +86,10 @@ d3.select("#intro")
 	.style("left", (xOffset + 20)+"px");
 
 //If the user us using a handheld, do not show the slider
-var sliderWidth = 350,
-	setNewYear;//Math.min(400,width/2);
+var sliderWidth = 350;
 if (handheld == false) {
 	//Initiate slider
 	d3.select('#slider')
-		.style("top", "20px")
 		.style("left", (width/2 + xOffset + padding + margin.left - sliderWidth/2)+"px")
 		.style("width", sliderWidth+"px")
 		.call(d3.slider().axis(d3.svg.axis().ticks(16).tickFormat(d3.format("d")))
@@ -106,7 +105,6 @@ if (handheld == false) {
 	var handheldText = d3.select("#slider")
 		  .style("left", (width/2 + xOffset + padding + margin.left - sliderWidth/2)+"px") 
 		  .style("width", sliderWidth+"px")
-		  .style("top", "10px")
 		  .append('text')                                     
 		  .attr("text-align", "center")
 		  .text("If you want to see other years, please check this page on a pc/laptop"); 

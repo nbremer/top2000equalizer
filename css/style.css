@@ -31,7 +31,7 @@ body {
 #searchBoxWrapper{
 	position: relative;
 	height: 25px;
-	padding-top: 110px;
+	top: 110px;
 	padding-bottom: 10px;
 	color: #474747;
 }
@@ -51,7 +51,7 @@ body {
 }
 
 #note {
-	position: relative;
+	position: absolute;
 	top: -10px;
 	left: 10px;
 	font-size: 9px;
@@ -61,7 +61,7 @@ body {
 }
 
 #slider {
-	position: relative;
+	top: 120px;
 }
 
 a {
