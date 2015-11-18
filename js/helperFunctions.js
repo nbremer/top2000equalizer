@@ -1,7 +1,7 @@
 // Helper functions
 
 window.onerror = function() {
-    location.reload();
+    //location.reload();
 }
 
 //Check for IE
@@ -49,10 +49,39 @@ function ArrNoDupe(a) {
 	return r;
 }//ArrNoDupe
 
+//Update the search box with only the names available in the chosen year
+function updateSearchbox(data) {
+		//Remove previous box
+		$('.combobox-container').remove();
+
+		//Remove all the previous options
+		var select = document.getElementById("searchBox"); 
+		select.options.length = 0;
+		select.options[0] = new Option("Artist Name...", "", true, false)
+		
+		//Create options - all the artists in the current year
+		var options = data.map(function(d) { return d.artist; });
+		options = ArrNoDupe(options); //remove duplicates
+		options = options.sort(); //sort
+		
+		//Put new options into select box
+		for(var i = 0; i < options.length; i++) {
+			var opt = options[i];
+			var el = document.createElement("option");
+			el.textContent = opt;
+			el.value = opt;
+			select.appendChild(el);
+		}
+
+		//Create search combo box
+		$('.combobox').combobox();
+		
+}//function updateSearchbox
+
 //What to do when searched for artist
-function searchArtist() {
+function searchArtist(artist) {
 	//find the artist
-	selectedArtist = document.getElementById('txtSearch').value;
+	selectedArtist = artist;
 	
 	if (selectedArtist == "") {
 		dotContainer.selectAll(".dot")

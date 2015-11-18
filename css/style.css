@@ -28,26 +28,26 @@ body {
   -webkit-margin-after: 0.3em;
 }
 
-#txtSearch{
-  background: #fff url(../img/clear.gif) no-repeat right -10px center;
-  border: 1px solid #999;
-  padding: 3px 18px 3px 4px;     /* Use the same right padding (18) in jQ! */
-  border-radius: 3px;
-  transition: background 0.4s;
-}
-#txtSearch.x  { 
-	background-position: right 5px center; 
-}
-#txtSearch.onX{ 
-	cursor: pointer; 
-}
-
-#searchBox{
+#searchBoxWrapper{
 	position: relative;
 	height: 25px;
-	padding-top: 120px;
-	padding-bottom: 5px;
-	opacity: 0.8;
+	padding-top: 110px;
+	padding-bottom: 10px;
+	color: #474747;
+}
+
+.form-control {
+	font-size: 11px;
+	background-color: #E8E8E8;
+	
+}
+
+.dropdown-menu {
+	font-size: 11px;
+}
+
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:hover {
+	background-color: #9C9C9C;
 }
 
 #note {

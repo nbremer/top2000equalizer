@@ -3,17 +3,18 @@ var IE = detectIE();
 
 //Check if people are viewing from a handheld device
 //If yes, only load the 2014 data to speed things up
-var handheld,
+var handheld = false,
 	fileName;
+
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-	handheld = true
+	//handheld = true
 	if (IE == true) { //IE cannot read Unicode saved files
 		fileName = "top2000lijst2014IE.csv";
 	} else {
 		fileName = "top2000lijst2014.csv";
 	}//else
 } else {
-	handheld = false;
+	//handheld = false;
 	if (IE == true) {
 		fileName = "top2000lijstIE.csv";
 	} else {
@@ -85,15 +86,10 @@ d3.select("#note")
 //Change intro location
 d3.select("#intro")
 	.style("left", (xOffset + 20)+"px");
-	
-//Change search box
-var searchWidth = Math.min(300,width/2);
-d3.select("#searchBox")
-	.style("left", (width/2 + xOffset + padding + margin.left - searchWidth/2)+"px")
-	.style("width", searchWidth+"px");
 
 //If the user us using a handheld, do not show the slider
-var sliderWidth = 350;//Math.min(400,width/2);
+var sliderWidth = 350,
+	setNewYear;//Math.min(400,width/2);
 if (handheld == false) {
 	//Initiate slider
 	d3.select('#slider')
@@ -103,12 +99,11 @@ if (handheld == false) {
 		.call(d3.slider().axis(d3.svg.axis().ticks(16).tickFormat(d3.format("d")))
 				.min(1999).max(2014).step(1).value(2014)
 				.on("slide", function(evt, value) {
-					//reset search box
-					document.getElementById('txtSearch').value = "";
+					//reset search
 					inSearch = false;
 					//Show new rectangles
 					chosenYear = value;
-					updateDots(chosenYear);
+					updateDots(chosenYear)
 				}));
 } else {
 	var handheldText = d3.select("#slider")
@@ -136,30 +131,31 @@ var yearTitle = svg.append('text')
 	  .attr('y', -10)	  
 	  .attr("class", "yearTitle")
 	  .text(chosenYear);  
+
+//Change search box
+var searchWidth = Math.min(300,width/2);
+d3.select("#searchBoxWrapper")
+	.style("left", (width/2 + xOffset + padding + margin.left - searchWidth/2)+"px")
+	.style("width", searchWidth+"px");
 	
+var updateDots;
+
 d3.csv(fileName, function(error, data) {
-	
+
 	//Convert to numeric values
-	data.forEach(function(d) {
-		d.release = +d.release;
-		d.year = +d.year;
-		d.position = +d.position;
-	});
-
-	//Save all artists for auto complete of search box
-	var optArray_temp = [];
-	for (var i = 0; i < data.length - 1; i++) {
-		optArray_temp.push(data[i].artist);
-	}//for
-	optArray = ArrNoDupe(optArray_temp); //remove duplicates
-	optArray = optArray.sort(); //sort
-	//Initiate autocomplete
-	$(function () {
-		$("#txtSearch").autocomplete({
-			source: optArray
-		});
-	});
-
+	//data.forEach(function(d) {
+	for(var i = 0; i < data.length; i++) { //Faster?
+		data[i].release = +data[i].release;
+		data[i].year = +data[i].year;
+		data[i].position = +data[i].position;
+	}//for i
+	//});	
+	
+	//Crossfilter
+	var cf = crossfilter(data);
+	// Create a dimension by political party
+    var cfYear = cf.dimension(function(d) { return d.year; });
+		
 	//Calculate domains of chart
 	startYear = d3.min(data, function(d) { return d.release; });
 	x.domain([startYear-1,d3.max(data, function(d) { return d.release; })+1]);//.nice();
@@ -203,56 +199,76 @@ d3.csv(fileName, function(error, data) {
 		  .style("text-anchor", "end")
 		  .text("Number of songs")
 	
-	//Initiate all rectangles 			
-	dotContainer.selectAll(".dot")
-		  .data(data)
-		.enter().append("rect")
-		//.filter(function(d) { return d.year == chosenYear; })
-		  .attr("class", "dot")
-		  .attr("width", rectWidth)
-		  .attr("height", rectHeight)
-		  .attr("rx", rectCorner)
-		  .attr("ry", rectCorner)
-		  .style("fill", function(d) { return color(d.position); })
-		  .on("mouseover", showTooltip)
-		  .on("mouseout", hideTooltip)
-		  .attr("x", function(d) { return (x(d.release) - rectWidth/2); })
-		  .attr("y", y(0))
-		  .attr("opacity",0);
-
-	//Only show rectangles of starting year
-	dotContainer.selectAll(".dot")
-		.filter(function(d) { return d.year == chosenYear; })
-		.attr("y", function(d) {return locateY(d);})
-		.transition().duration(20).delay(function(d,i) {return i*1})
-		.attr("opacity",1) ;
-	
 	//Create the legend
 	createLegend();
+
+	//Change the year when moving the slider
+	updateDots = function (chosenYear) {
+		
+		//Filter the chosen year from the total dataset
+		var yearData = cfYear.filterExact(chosenYear);
+
+		//Update the search box with only the names available in the chosen year
+		updateSearchbox(yearData.top(Infinity));
+		
+		//Reset the heights
+		years.forEach(function(value, index) {
+			years[index].number = 1;
+		});
+	
+		//DATA JOIN
+		//Join new data with old elements, if any.
+		var dots = dotContainer.selectAll(".dot")
+					.data(yearData
+							.top(Infinity)
+							.sort(function(a, b) {return a.position - b.position}), 
+							function(d) { return d.position; });
+		
+		//ENTER
+		dots.enter().append("rect")
+			  .attr("class", "dot")
+			  .attr("width", rectWidth)
+			  .attr("height", rectHeight)
+			  .attr("rx", rectCorner)
+			  .attr("ry", rectCorner)
+			  .style("fill", function(d) { return color(d.position); })
+			  .on("mouseover", showTooltip)
+			  .on("mouseout", hideTooltip)
+			  .attr("x", function(d) { return (x(d.release) - rectWidth/2); })
+			  .attr("y", function(d) {return y(0);})
+			  .style("opacity",0);
+
+		//EXIT
+		dots.exit()
+			.transition().duration(500)
+			.attr("y", function(d) { return y(0); })
+			.style("opacity",0)
+			.remove();
+			
+		//UPDATE
+		//First drop all rects to the zero y-axis and make them invisible
+		//Then set them all to the correct new release year (x-axis)
+		//Then let them grow to the right y locations again and make the visible
+		dots
+			.transition().duration(500)
+			.attr("y", function(d) { return y(0); })
+			.style("opacity",0)
+			.call(endall, function() {
+				dots
+					.attr("x", function(d) { return (x(d.release) - rectWidth/2); })
+					.transition().duration(10).delay(function(d,i) { return i; })
+					.attr("y", function(d) { return locateY(d); })
+					.style("opacity",1);
+			});
+			
+		//Change year title
+		yearTitle.text(chosenYear);
+		//Save the current year
+		chosenYearOld = chosenYear;
+		
+	}//function updateDots
+	
+	//Call first time
+	updateDots(chosenYear);
 	
 });
-
-//Change the year when moving the slider
-function updateDots(chosenYear) {
-	//Reset the heights
-	years.forEach(function(value, index) {years[index].number = 1;});
-
-	//Remove previous year bars
-	dotContainer.selectAll(".dot")
-		.filter(function(d) { return d.year == chosenYearOld; })
-		.transition().duration(1000).delay(100)
-		.attr("opacity",0)
-		.attr("y", y(0));
-	
-	//Show chosen year bars	
-	dotContainer.selectAll(".dot")
-		.filter(function(d) { return d.year == chosenYear; })
-		.attr("y", function(d) {return locateY(d);})
-		.transition().duration(10).delay(function(d,i) {return 1101 + i*1})
-		.attr("opacity",1);
-
-	//Change year title
-	yearTitle.text(chosenYear);
-	//Save the current year
-	chosenYearOld = chosenYear;
-}// updateDots

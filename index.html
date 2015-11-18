@@ -6,14 +6,24 @@
 	<link href='http://fonts.googleapis.com/css?family=Raleway:100,300' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
 
+	<!-- D3 -->
 	<script src="http://d3js.org/d3.v3.min.js"></script>
-	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-	<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+	<script src="js/crossfilter.min.js"></script>
 	
-	<link rel="stylesheet" href="css/style.css"/>
+	<!-- jQuery -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+	<!-- Combobox script for the search box -->
+	<script src="js/bootstrap-combobox.js"></script>
+	<link href="css/bootstrap-combobox.css" rel="stylesheet">
+
 	<link rel="stylesheet" href="css/tooltip.css"/>
 	<link rel="stylesheet" href="css/d3.slider.css"/> 
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="css/style.css"/>
 	
 <body>
 
@@ -25,9 +35,10 @@
 	</div>
 	
 	<!-- The search box -->
-	<div id="searchBox" class="ui-widget">
-	   <input id="txtSearch" type="text" placeholder="Search for an artist...">
-	   <button id="btnSearch" type="button" onclick="searchArtist()">Search</button>
+	<div class="form-group" id="searchBoxWrapper">			
+		<select id="searchBox" class="combobox input-large form-control" style="display: none;" onchange="searchArtist(this.value)">
+			 <option value="" selected="selected">Artist Name...</option>
+		</select>
 	</div>
 
 	<!-- slider -->
