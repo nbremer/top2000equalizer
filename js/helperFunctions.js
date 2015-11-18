@@ -98,11 +98,3 @@ function searchArtist(artist) {
 	}//else
 		
 }// searchArtist
-
-//If the user clicks anywhere while in search mode, remove the search
-d3.select("body").on("click", function() { 
-	if(inSearch) {
-		inSearch = false;
-		searchArtist("");
-	}		
-});

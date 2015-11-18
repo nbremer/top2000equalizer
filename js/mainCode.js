@@ -101,6 +101,14 @@ if (handheld == false) {
 					chosenYear = value;
 					updateDots(chosenYear)
 				}));
+				
+	//If the user clicks anywhere while in search mode, remove the search
+	d3.select("body").on("click", function() { 
+		if(inSearch) {
+			inSearch = false;
+			searchArtist("");
+		}		
+	});
 } else {
 	var handheldText = d3.select("#slider")
 		  .style("left", (width/2 + xOffset + padding + margin.left - sliderWidth/2)+"px") 

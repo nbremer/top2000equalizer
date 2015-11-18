@@ -61,7 +61,8 @@ body {
 }
 
 #slider {
-	top: 120px;
+	position: absolute;
+	top: 160px;
 }
 
 a {
