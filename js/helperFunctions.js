@@ -1,8 +1,8 @@
 // Helper functions
 
-window.onerror = function() {
+//window.onerror = function() {
     //location.reload();
-}
+//}
 
 //Check for IE
 function detectIE() {
@@ -82,47 +82,27 @@ function updateSearchbox(data) {
 function searchArtist(artist) {
 	//find the artist
 	selectedArtist = artist;
-	
-	if (selectedArtist == "") {
+
+	if (selectedArtist === "") {
 		dotContainer.selectAll(".dot")
-			.filter(function(d) { return d.year == chosenYear;})
-			.attr("opacity",1);
+			.style("opacity",1);
 			
 		inSearch = false;
-	
 	} else {
 		dotContainer.selectAll(".dot")
-			.filter(function(d) { return d.year == chosenYear && d.artist.toLowerCase() == selectedArtist.toLowerCase(); })
-			.attr("opacity",1);
+			.style("opacity", function(d) {
+				return d.artist.toLowerCase() == selectedArtist.toLowerCase() ? 1 : 0.2; 
+			});
 			
-		dotContainer.selectAll(".dot")
-			.filter(function(d) { return d.year == chosenYear && d.artist.toLowerCase() != selectedArtist.toLowerCase(); })
-			.attr("opacity",0.2);
-		
 		inSearch = true;
 	}//else
+		
 }// searchArtist
 
-//Also fire search on Enter in search box	  
-$("#txtSearch").keyup(function(event){
-	if(event.keyCode == 13){
-		$("#btnSearch").click();
-	}
-});
-
-//Taken from http://stackoverflow.com/questions/6258521/clear-icon-inside-input-text
-//Reset search box 'x'
-$(document).on('input', '#txtSearch', function() {
-		$(this)[tog(this.value)]('x');
-	}).on('mousemove', '.x', function(e) {
-		$(this)[tog(this.offsetWidth-18 < e.clientX-this.getBoundingClientRect().left)]('onX');   
-	}).on('click', '.onX', function(){
-		$(this).removeClass('x onX').val('').change();
-	
-		dotContainer.selectAll(".dot")
-			.filter(function(d) { return d.year == chosenYear;})
-			.attr("opacity",1);	
+//If the user clicks anywhere while in search mode, remove the search
+d3.select("body").on("click", function() { 
+	if(inSearch) {
 		inSearch = false;
-	});
-
-function tog(v){return v?'addClass':'removeClass';} 
+		searchArtist("");
+	}		
+});
