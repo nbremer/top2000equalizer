@@ -1,5 +1,3 @@
-//Check for IE
-var IE = detectIE();
 
 //Check if people are viewing from a handheld device
 //If yes, only load the 2014 data to speed things up
@@ -14,9 +12,9 @@ var handheld = window.mobileAndTabletcheck();
 
 var fileName;	
 if(handheld) {
-	fileName = (IE ? "top2000lijst2014IE.csv" : "top2000lijst2014.csv"); //IE cannot read Unicode saved files
+	fileName = (is_IE | is_Firefox ? "top2000lijst2014IE.csv" : "top2000lijst2014.csv"); //IE & Firefox cannot read Unicode saved files
 } else {
-	fileName = (IE ? "top2000lijstIE.csv" : "top2000lijst.csv");
+	fileName = (is_IE | is_Firefox ? "top2000lijstIE.csv" : "top2000lijst.csv");
 }//else
 
 //Width and Height of the SVG
@@ -143,7 +141,7 @@ d3.select("#searchBoxWrapper")
 	
 var updateDots;
 
-d3.csv(fileName, function(error, data) {
+d3.csv("data/"+fileName, function(error, data) {
 
 	//Convert to numeric values
 	//data.forEach(function(d) {
@@ -151,13 +149,15 @@ d3.csv(fileName, function(error, data) {
 		data[i].release = +data[i].release;
 		data[i].year = +data[i].year;
 		data[i].position = +data[i].position;
+		data[i].title = "" + data[i].title;
+		data[i].artist = "" + data[i].artist;
 	}//for i
-	//});	
-	
+	//});
+
 	//Crossfilter
 	var cf = crossfilter(data);
 	// Create a dimension by political party
-    var cfYear = cf.dimension(function(d) { return d.year; });
+    var cfYear = cf.dimension(function(d) { return +d.year; });
 		
 	//Calculate domains of chart
 	startYear = d3.min(data, function(d) { return d.release; });
@@ -209,7 +209,7 @@ d3.csv(fileName, function(error, data) {
 	updateDots = function (chosenYear) {
 		
 		//Filter the chosen year from the total dataset
-		var yearData = cfYear.filterExact(chosenYear);
+		var yearData = cfYear.filterExact(+chosenYear);
 
 		//Update the search box with only the names available in the chosen year
 		updateSearchbox(yearData.top(Infinity));
@@ -224,8 +224,8 @@ d3.csv(fileName, function(error, data) {
 		var dots = dotContainer.selectAll(".dot")
 					.data(yearData
 							.top(Infinity)
-							.sort(function(a, b) {return a.position - b.position}), 
-							function(d) { return d.position; });
+							.sort(function(a, b) {return a.position - b.position}) 
+							, function(d) { return d.position; });
 		
 		//ENTER
 		dots.enter().append("rect")

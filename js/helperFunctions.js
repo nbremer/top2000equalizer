@@ -4,6 +4,10 @@
     //location.reload();
 //}
 
+//Check for Firefox
+var is_Firefox = /firefox/i.test(navigator.userAgent);
+var is_IE = detectIE();
+
 //Check for IE
 function detectIE() {
 

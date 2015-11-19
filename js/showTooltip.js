@@ -16,7 +16,7 @@ function showTooltip(d) {
 	}// else
 	
 	//Set first location of tooltip and change opacity
-	var xpos = (+el.attr('x') + rectWidth/2 + padding + xOffset + offsets.left);
+	var xpos = (+el.attr('x') + margin.left + rectWidth/2 + padding + xOffset + offsets.left);
 	var ypos = (+el.attr('y') + margin.top - rectHeight*3 + offsets.top);
 	 
 	//Position the tooltip
