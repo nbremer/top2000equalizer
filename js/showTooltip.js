@@ -1,23 +1,22 @@
 //Show the tooltip on hover
 function showTooltip(d) {
-
-	//Current element	
-	var el = d3.select(this);
 	
 	if (inSearch == true) {
-		if (d.artist.toLowerCase() != selectedArtist.toLowerCase()) return;	
+		//Don't do anything if the search is active and the user doesn't mouse over the selected artist
+		if (d.artist.toLowerCase() !== selectedArtist.toLowerCase()) return;	
 	} else {
 		//Save the current element
 		var chosen = d;
 		//Reduce opacity of all other elements
 		svg.selectAll(".dot")
-			.filter(function(d) { return d.year == chosenYear && d != chosen;})
-			.style("fill-opacity", 0.2);		
+			.style("opacity", function(d) { return d.position === chosen.position ? 1 : 0.2; });		
 	}// else
 	
+	//Position tooltip
+	var Loc = this.getBoundingClientRect();
 	//Set first location of tooltip and change opacity
-	var xpos = (+el.attr('x') + margin.left + rectWidth/2 + padding + xOffset + offsets.left);
-	var ypos = (+el.attr('y') + margin.top - rectHeight*3 + offsets.top);
+	var xpos = Loc.left + rectWidth/2;
+	var ypos = Loc.top - rectHeight*3;
 	 
 	//Position the tooltip
 	d3.select("#tooltip")
@@ -38,8 +37,7 @@ function hideTooltip(d) {
 	if (inSearch == false) {
 		//All opacities back to 1
 		svg.selectAll(".dot")
-			.filter(function(d) { return d.year == chosenYear; })
-			.style("fill-opacity", 1);
+			.style("opacity", 1);
 	}//if
 	
 	//Hide tooltip
