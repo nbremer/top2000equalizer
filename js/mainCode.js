@@ -8,8 +8,9 @@ var startYear,
 	rectWidth,
 	rectHeight,
 	rectCorner,
-	chosenYear = 2014,
-	chosenYearOld = 2014,
+	currentYear = 2015,
+	chosenYear = currentYear,
+	chosenYearOld = currentYear,
 	optArray, //for search box
 	inSearch = false, //is the search box being used - for tooltip
 	selectedArtist, //for search box and highlighting
@@ -65,7 +66,7 @@ if (handheld == false) {
 		.style("left", (width/2 + xOffset + padding + margin.left - sliderWidth/2)+"px")
 		.style("width", sliderWidth+"px")
 		.call(d3.slider().axis(d3.svg.axis().ticks(16).tickFormat(d3.format("d")))
-				.min(1999).max(2014).step(1).value(2014)
+				.min(1999).max(currentYear).step(1).value(currentYear)
 				.on("slide", function(evt, value) {
 					//reset search
 					inSearch = false;
