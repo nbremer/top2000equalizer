@@ -166,6 +166,11 @@ d3.csv("data/"+fileName, function(error, data) {
 	}//for i
 	//});
 
+	//Check for data errors
+	// data.forEach(function (d,i) {
+	// 	if (isNaN(d.release)) console.log(d);
+	// })
+
 	//Crossfilter
 	var cf = crossfilter(data);
 	// Create a dimension by political party
